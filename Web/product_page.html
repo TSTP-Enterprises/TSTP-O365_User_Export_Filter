@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O365 User Filter</title>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTTXzSNP9lN+1H5ZLX3B0jS3L74bKcPfH1eNkQ6eQFzhm2L3Jjg3+cVYxz3DyBVwM6P+Ih2C5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts for Better Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Improved CSS -->
+    <style>
+        /* CSS Variables for Consistent Color Palette */
+        :root {
+            --primary-color: #1e1e2f;
+            --secondary-color: #2c2c3e;
+            --accent-color: #e74c3c;
+            --accent-hover-color: #c0392b;
+            --light-grey: #bdc3c7;
+            --dark-grey: #34495e;
+            --white: #ffffff;
+            --text-color: #f0f0f0;
+            --link-color: #e74c3c;
+            --link-hover-color: #c0392b;
+        }
+
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover-color));
+            color: var(--white);
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .hero-section:hover {
+            transform: scale(1.02);
+            opacity: 0.98;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            animation: rotateBackground 20s linear infinite;
+            z-index: 1;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--white);
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .download-button:hover {
+            transform: scale(1.1);
+            background-color: var(--accent-hover-color);
+            color: var(--white);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Features Section */
+        .features-section {
+            background-color: var(--secondary-color);
+            padding: 80px 20px;
+            color: var(--text-color);
+        }
+
+        .features-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+
+        .features-section p {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--light-grey);
+            font-size: 1.1em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.5);
+            background-color: var(--accent-color);
+        }
+
+        .feature-card i {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            transition: color 0.4s ease, transform 0.4s ease;
+        }
+
+        .feature-card:hover i {
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            font-size: 1.5em;
+            transition: color 0.4s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: var(--white);
+        }
+
+        .feature-card p {
+            color: var(--light-grey);
+            font-size: 1.1em;
+            transition: color 0.4s ease;
+        }
+
+        .feature-card:hover p {
+            color: var(--white);
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            background-color: var(--dark-grey);
+            padding: 80px 20px;
+            color: var(--text-color);
+        }
+
+        .how-it-works-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+
+        .how-it-works-section p {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--light-grey);
+            font-size: 1.1em;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .step-card {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        .step-card h3 {
+            font-size: 1.3em;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            font-size: 1em;
+            color: var(--light-grey);
+        }
+
+        /* Demo Section */
+        .demo-section {
+            background-color: var(--secondary-color);
+            padding: 80px 20px;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .demo-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+        }
+
+        .demo-section p {
+            margin-bottom: 30px;
+            color: var(--light-grey);
+            font-size: 1.1em;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            padding-top: 25px;
+            height: 0;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        .video-container:hover {
+            transform: scale(1.02);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Collapsible Sections */
+        .collapsible-sections {
+            background-color: var(--secondary-color);
+            padding: 40px 20px;
+        }
+
+        .collapsible-sections details {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .collapsible-sections summary {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            list-style: none;
+        }
+
+        .collapsible-sections summary::after {
+            content: '\f0da'; /* Font Awesome Chevron Right */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-sections details[open] summary::after {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        .collapsible-sections h3 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 15px;
+        }
+
+        .collapsible-sections p, .collapsible-sections ul, .collapsible-sections ol {
+            color: var(--light-grey);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .collapsible-sections li {
+            margin-bottom: 10px;
+        }
+
+        .collapsible-sections a {
+            color: var(--accent-color);
+        }
+
+        /* Download Section */
+        .download-section {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .download-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .download-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .download-section .download-button {
+            background-color: var(--white);
+            color: var(--accent-color);
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .download-section .download-button:hover {
+            transform: scale(1.1);
+            background-color: var(--dark-grey);
+            color: var(--white);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .footer a {
+            color: var(--accent-color);
+        }
+
+        /* Keyframes */
+        @keyframes rotateBackground {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 20px;
+            }
+
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+
+            .hero-section p {
+                font-size: 1em;
+            }
+
+            .features-grid, .steps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .download-button, .download-section .download-button {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .video-container {
+                padding-bottom: 56.25%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+
+            .hero-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .features-section h2, .how-it-works-section h2, .demo-section h2, .download-section h2 {
+                font-size: 2rem;
+            }
+
+            .features-section p, .how-it-works-section p, .demo-section p, .download-section p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h2>O365 User Filter</h2>
+        <p>Streamline your Office 365 user management by filtering and exporting user data effortlessly through our powerful web application.</p>
+        <a href="https://tstp.xyz/tools/o365_list_filter/" class="download-button">Try the Tool Now</a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <h2>Key Features</h2>
+        <p>Discover how O365 User Filter simplifies your user management tasks with robust filtering and export capabilities.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-filter"></i>
+                <h3>Advanced Filtering</h3>
+                <p>Apply filters based on user status, license type, and sign-in permissions for precise data management.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-columns"></i>
+                <h3>Customizable Columns</h3>
+                <p>Choose the specific columns you need to display, ensuring a tailored and relevant view of your user data.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-file-export"></i>
+                <h3>Multiple Export Options</h3>
+                <p>Export your filtered data in CSV, TXT, or PDF formats, making it easy to share and report your findings.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Data Privacy</h3>
+                <p>Your data remains secure as all processing is done locally in your browser, with no external servers involved.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-sync-alt"></i>
+                <h3>Real-Time Updates</h3>
+                <p>Experience instant feedback as you apply filters, ensuring your data view is always up-to-date.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Analytics Integration</h3>
+                <p>Seamlessly integrate with your preferred analytics tools to gain deeper insights from your filtered data.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works-section">
+        <h2>How It Works</h2>
+        <p>Manage your user data efficiently with O365 User Filter. Upload, filter, customize, and export your data effortlessly.</p>
+        <div class="steps-grid">
+            <div class="step-card">
+                <h3>1. Upload CSV File</h3>
+                <p>Upload your Office 365 user data in CSV format to get started.</p>
+            </div>
+            <div class="step-card">
+                <h3>2. Apply Filters</h3>
+                <p>Apply the necessary filters based on user status, license, and sign-in permissions.</p>
+            </div>
+            <div class="step-card">
+                <h3>3. Customize Data</h3>
+                <p>Choose the columns you need and format the data for better readability.</p>
+            </div>
+            <div class="step-card">
+                <h3>4. Export Results</h3>
+                <p>Download your filtered data in CSV, TXT, or PDF formats.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div class="demo-section">
+        <h2>Try the Tool</h2>
+        <p>Experience O365 User Filter directly in your browser.</p>
+        <div class="video-container">
+            <iframe src="https://tstp.xyz/tools/o365_list_filter/" title="O365 User Filter Demo" frameborder="0" style="width: 100%; height: 600px;"></iframe>
+        </div>
+    </div>
+
+    <!-- Collapsible Sections -->
+    <div class="collapsible-sections">
+        <!-- User Guide -->
+        <details>
+            <summary>User Guide</summary>
+            <h3>1. Uploading Your CSV File</h3>
+            <ol>
+                <li>Navigate to the O365 User Filter web application.</li>
+                <li>Click on the <strong>"Upload CSV"</strong> button.</li>
+                <li>Select your Office 365 user export CSV file from your device.</li>
+            </ol>
+
+            <h3>2. Applying Filters</h3>
+            <ol>
+                <li>Once the CSV is uploaded, navigate to the <strong>"Filters"</strong> section.</li>
+                <li>Select the criteria you wish to filter by, such as <strong>Active</strong>, <strong>Licensed</strong>, or <strong>Sign-In Blocked</strong>.</li>
+                <li>Click on <strong>"Apply Filters"</strong> to see the filtered results.</li>
+            </ol>
+
+            <h3>3. Customizing Columns</h3>
+            <ol>
+                <li>Go to the <strong>"Columns"</strong> tab.</li>
+                <li>Check or uncheck the columns you want to display in your filtered data.</li>
+                <li>Your view will update in real-time based on your selections.</li>
+            </ol>
+
+            <h3>4. Exporting Data</h3>
+            <ol>
+                <li>After applying your desired filters and customizing columns, navigate to the <strong>"Export"</strong> section.</li>
+                <li>Select your preferred export format: <strong>CSV</strong>, <strong>TXT</strong>, or <strong>PDF</strong>.</li>
+                <li>Click on the <strong>"Export"</strong> button to download your filtered data.</li>
+            </ol>
+
+            <h3>5. Managing Settings</h3>
+            <ul>
+                <li>Access additional settings through the application's menu to customize behavior and preferences.</li>
+                <li>Enable features like dark mode for a personalized user experience.</li>
+            </ul>
+        </details>
+
+        <!-- Build Information -->
+        <details>
+            <summary>Build Information</summary>
+            <ul>
+                <li><strong>Programming Language:</strong> JavaScript (React)</li>
+                <li><strong>Framework:</strong> React.js</li>
+                <li><strong>Backend:</strong> Node.js with Express</li>
+                <li><strong>Version:</strong> 1.0.0</li>
+                <li><strong>License:</strong> MIT License</li>
+            </ul>
+            <h3>Building from GitHub</h3>
+            <ol>
+                <li><strong>Clone the Repository:</strong>
+                    <pre><code>git clone https://github.com/TSTP-Enterprises/TSTP-O365_User_List_Filter.git
+cd O365-User-Filter</code></pre>
+                </li>
+                <li><strong>Install Dependencies:</strong>
+                    <p>Ensure you have Node.js installed. Install the required packages using npm:</p>
+                    <pre><code>npm install</code></pre>
+                </li>
+                <li><strong>Run the Application:</strong>
+                    <p>Start the development server:</p>
+                    <pre><code>npm start</code></pre>
+                    <p>The application will be available at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>.</p>
+                </li>
+                <li><strong>Build for Production:</strong>
+                    <p>Create an optimized production build:</p>
+                    <pre><code>npm run build</code></pre>
+                </li>
+            </ol>
+        </details>
+
+        <!-- Development -->
+        <details>
+            <summary>Development</summary>
+            <p>
+                <strong>O365 User Filter</strong> was developed to address the need for efficient and precise user data management within Office 365 environments. Administrators often struggle with managing large user lists, applying consistent filters, and exporting data for reporting or compliance purposes.
+            </p>
+            <h3>Development Process:</h3>
+            <ol>
+                <li><strong>Requirement Analysis:</strong> Identified key functionalities required by Office 365 administrators, such as advanced filtering, customizable views, and secure data handling.</li>
+                <li><strong>Design:</strong> Created an intuitive user interface that allows for easy navigation and quick access to essential features.</li>
+                <li><strong>Implementation:</strong> Utilized React.js for a responsive frontend and Node.js with Express for backend data processing, ensuring a seamless user experience.</li>
+                <li><strong>Testing:</strong> Conducted extensive testing with real Office 365 data to ensure accuracy, reliability, and performance under various scenarios.</li>
+                <li><strong>Deployment:</strong> Deployed the web application using cloud services for scalability and accessibility.</li>
+            </ol>
+            <h3>Why It Was Made:</h3>
+            <p>
+                The primary goal was to create a tool that simplifies the complexities of managing Office 365 user data. By automating filtering and exporting processes, <strong>O365 User Filter</strong> reduces administrative overhead, minimizes errors, and enhances data accessibility for reporting and analysis.
+            </p>
+        </details>
+
+        <!-- Contributing -->
+        <details>
+            <summary>Contributing</summary>
+            <p>We welcome contributions to enhance <strong>O365 User Filter</strong>! Whether it's reporting a bug, suggesting a feature, or submitting a pull request, your input is invaluable.</p>
+            <ol>
+                <li><strong>Fork the Repository:</strong> Click the <strong>Fork</strong> button at the top-right corner of the repository page.</li>
+                <li><strong>Create a Feature Branch:</strong>
+                    <pre><code>git checkout -b feature/YourFeature</code></pre>
+                </li>
+                <li><strong>Commit Your Changes:</strong>
+                    <pre><code>git commit -m "Add YourFeature"</code></pre>
+                </li>
+                <li><strong>Push to the Branch:</strong>
+                    <pre><code>git push origin feature/YourFeature</code></pre>
+                </li>
+                <li><strong>Open a Pull Request:</strong> Navigate to the repository on GitHub and click <strong>New Pull Request</strong>.</li>
+            </ol>
+            <p>For detailed guidelines, refer to our <a href="https://github.com/TSTP-Enterprises/TSTP-O365_User_List_Filter/blob/main/CONTRIBUTING.md" target="_blank">Contributing Guidelines</a>.</p>
+        </details>
+
+        <!-- Support -->
+        <details>
+            <summary>Support</summary>
+            <p>Your support helps us maintain and improve <strong>O365 User Filter</strong>. As a free and open-source tool, donations help cover development costs and ensure the project remains sustainable.</p>
+            <p>If you find this tool valuable, please consider supporting us via <a href="https://www.paypal.com/donate/?hosted_button_id=RAAYNUTMHPQQN" target="_blank">PayPal</a>.</p>
+            <p>Your contributions are greatly appreciated and help us continue providing this essential tool to the community.</p>
+        </details>
+
+        <!-- License -->
+        <details>
+            <summary>License</summary>
+            <p>This project is licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</p>
+            <p><strong>O365 User Filter</strong> is open-source, free to use, and does not offer any packages, plans, or additional services.</p>
+        </details>
+
+        <!-- Links -->
+        <details>
+            <summary>Links</summary>
+            <ul>
+                <li><strong>Official Website:</strong> <a href="https://tstp.xyz/" target="_blank">TSTP Solutions</a></li>
+                <li><strong>GitHub Organization:</strong> <a href="https://github.com/TSTP-Enterprises" target="_blank">TSTP-Enterprises</a></li>
+                <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/thesolutions-toproblems" target="_blank">TSTP LinkedIn</a></li>
+                <li><strong>YouTube Channel:</strong> <a href="https://www.youtube.com/@yourpststudios" target="_blank">(TSTP) YourPST Studios</a></li>
+                <li><strong>Facebook Page:</strong> <a href="https://www.facebook.com/profile.php?id=61557162643039" target="_blank">TSTP Solutions</a></li>
+                <li><strong>GitHub Repository:</strong> <a href="https://github.com/TSTP-Enterprises/TSTP-O365_User_List_Filter" target="_blank">O365-User-Filter</a></li>
+                <li><strong>Software Page:</strong> <a href="https://https://tstp.xyz/tools/o365_list_filter/" target="_blank">O365 User Filter Software</a></li>
+                <li><strong>Download Link:</strong> <a href="https://github.com/TSTP-Enterprises/TSTP-O365_User_List_Filter/releases" target="_blank">Download O365 User Filter</a></li>
+            </ul>
+        </details>
+
+        <!-- Acknowledgements -->
+        <details>
+            <summary>Acknowledgements</summary>
+            <p>A heartfelt thank you to all the users who have supported <strong>O365 User Filter</strong>. Your feedback and encouragement drive us to continuously improve and provide the best possible tool for managing Office 365 user data.</p>
+        </details>
+    </div>
+    
+    <!-- Download Section -->
+    <div class="download-section">
+        <h2>Get Started with O365 User Filter</h2>
+        <p>Experience the easiest way to filter and export your Office 365 user data. Use the web application online or download it from our GitHub repository.</p>
+        <div class="download-buttons">
+            <a href="https://tstp.xyz/tools/o365_list_filter/" class="download-button">Use the Web App</a>
+            <a href="https://github.com/TSTP-Enterprises/TSTP-O365_User_List_Filter/releases" class="download-button">Download from GitHub</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 TSTP Solutions. All rights reserved.</p>
+        <p>Visit us at <a href="https://tstp.xyz" target="_blank">tstp.xyz</a></p>
+    </div>
+
+</body>
+</html>
